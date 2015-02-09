@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
@@ -45,16 +46,50 @@ public class Baidu {
 //		 logger.info(htmlSourceString);
 		 return htmlSourceString;
 	}
-	
-	public void getTheTopAd(String htmlSource){
-		Document htmlDocument = Jsoup.parse(htmlSource); 
-		List<String> elements = this.exact(htmlDocument);
-		logger.info("{}", elements);
-	}
-	public List<String> exact(Document jsoup){
-		Elements elements = jsoup.select("div[id~=tools_(.00.)]");
-		return elements.stream()
-                .map((e) -> e.previousElementSibling().getElementsByTag("span").text())
+
+    public void getTheAd(String htmlSource){
+        Document htmlDocument = Jsoup.parse(htmlSource);
+        List<String> topElements = this.exactTopAds(htmlDocument);
+        logger.info("top Ads");
+        logger.info("{}", topElements);
+        List<String> rightElements = this.exactRightAds(htmlDocument);
+        logger.info("right Ads");
+        logger.info("{}", rightElements);
+        List<String> contentElements = this.exactContentAds(htmlDocument);
+        logger.info("contentElements Ads");
+        logger.info("{}", contentElements);
+    }
+    public List<String> exactTopAds(Document jsoup){
+        //with error currently
+        Elements elements = jsoup.select("table[id~=(.00.)] a[class=ipYENq]");
+        /*List<Elements> elementDivs = elements.stream()
+                .map((e) -> e.select("#tools_"))
+                .collect(Collectors.toList());*/
+
+        return elements.stream()
+                .map((e) -> e.getElementsByTag("span").text())
                 .collect(Collectors.toList());
-	}
+    }
+    public List<String> exactRightAds(Document jsoup){
+        //with error currently
+        Elements elements = jsoup.select("#ec_im_container font[size=-1][class~=^()");
+        /*List<Elements> elementDivs = elements.stream()
+                .map((e) -> e.select("#tools_"))
+                .collect(Collectors.toList());*/
+
+        return elements.stream()
+                .map((e) -> e.text())
+                .collect(Collectors.toList());
+    }
+    public List<String> exactContentAds(Document jsoup){
+        //with error currently
+        Elements elements = jsoup.select("div[id~=(30.)] div:eq(2) span:eq(0)");
+        /*List<Elements> elementDivs = elements.stream()
+                .map((e) -> e.select("#tools_"))
+                .collect(Collectors.toList());*/
+
+        return elements.stream()
+                .map((e) -> e.text())
+                .collect(Collectors.toList());
+    }
 } 
