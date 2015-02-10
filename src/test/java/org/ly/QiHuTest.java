@@ -12,7 +12,7 @@ public class QiHuTest {
 	public void crawlerTest() throws IOException {
 		QiHu qihuCrawler = new QiHu();
         //String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("bitecoin.html"));
-        String htmlSourceString = qihuCrawler.getSearchedHtmlSource("上海 花店");
-        qihuCrawler.getTheAd(htmlSourceString);
+        String htmlSourceString = qihuCrawler.getSearchedHtmlSource("网上购物");
+        qihuCrawler.getTheAd(htmlSourceString,"网上购物");
 	}
 }

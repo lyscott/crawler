@@ -50,13 +50,13 @@ public class Baidu {
     public void getTheAd(String htmlSource){
         Document htmlDocument = Jsoup.parse(htmlSource);
         List<String> topElements = this.exactTopAds(htmlDocument);
-        logger.info("top Ads");
+        logger.info("baidu top Ads");
         logger.info("{}", topElements);
         List<String> rightElements = this.exactRightAds(htmlDocument);
-        logger.info("right Ads");
+        logger.info("baidu right Ads");
         logger.info("{}", rightElements);
         List<String> contentElements = this.exactContentAds(htmlDocument);
-        logger.info("contentElements Ads");
+        logger.info("baidu contentElements Ads");
         logger.info("{}", contentElements);
     }
     public List<String> exactTopAds(Document jsoup){
