@@ -89,8 +89,8 @@ public class QiHu {
                     de.setUrl(url);
                     de.setPosition("Top");
                     de.setCreateTime(Calendar.getInstance());
-                    de.setSearchEngine("奇虎");
-                    de.setKeyword(keyword);
+//                    de.setSearchEngine("奇虎");
+//                    de.setKeyword(keyword);
                     em.getTransaction().begin();
                     em.persist(de);
                     em.getTransaction().commit();
@@ -110,18 +110,18 @@ public class QiHu {
                     String url = "";
                     if (e.text().indexOf("http://e.360.cn")==-1) {
                         url = e.text();
+                        DataEntry de = new DataEntry();
+                        de.setUrl(url);
+                        de.setPosition("Right");
+                        de.setCreateTime(Calendar.getInstance());
+//                    de.setSearchEngine("奇虎");
+//                    de.setKeyword(keyword);
+                        em.getTransaction().begin();
+                        em.persist(de);
+                        em.getTransaction().commit();
                     } else {
                         url = "1111";
                     }
-                    DataEntry de = new DataEntry();
-                    de.setUrl(url);
-                    de.setPosition("Right");
-                    de.setCreateTime(Calendar.getInstance());
-                    de.setSearchEngine("奇虎");
-                    de.setKeyword(keyword);
-                    em.getTransaction().begin();
-                    em.persist(de);
-                    em.getTransaction().commit();
                     return url;
                 }).collect(Collectors.toList());
     }
@@ -133,7 +133,19 @@ public class QiHu {
                 .collect(Collectors.toList());*/
 
         return elements.stream()
-                .map((e) -> e.text())
+                .map((e) -> {
+                    String url = e.text();
+                    DataEntry de = new DataEntry();
+                    de.setUrl(url);
+                    de.setPosition("Content");
+                    de.setCreateTime(Calendar.getInstance());
+//                    de.setSearchEngine("奇虎");
+//                    de.setKeyword(keyword);
+                    em.getTransaction().begin();
+                    em.persist(de);
+                    em.getTransaction().commit();
+                    return url;
+                })
                 .collect(Collectors.toList());
     }
 } 

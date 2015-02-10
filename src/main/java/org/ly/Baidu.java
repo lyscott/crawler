@@ -1,10 +1,12 @@
 package org.ly;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.ly.persistence.DataEntry;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
@@ -17,6 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class Baidu {
   
@@ -47,19 +53,23 @@ public class Baidu {
 		 return htmlSourceString;
 	}
 
-    public void getTheAd(String htmlSource){
+    public void getTheAd(String htmlSource, String keyword){
         Document htmlDocument = Jsoup.parse(htmlSource);
-        List<String> topElements = this.exactTopAds(htmlDocument);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CWL");
+        EntityManager em = emf.createEntityManager();
+        List<String> topElements = this.exactTopAds(htmlDocument,em,keyword);
         logger.info("baidu top Ads");
         logger.info("{}", topElements);
-        List<String> rightElements = this.exactRightAds(htmlDocument);
+        List<String> rightElements = this.exactRightAds(htmlDocument,em,keyword);
         logger.info("baidu right Ads");
         logger.info("{}", rightElements);
-        List<String> contentElements = this.exactContentAds(htmlDocument);
+        List<String> contentElements = this.exactContentAds(htmlDocument,em,keyword);
         logger.info("baidu contentElements Ads");
         logger.info("{}", contentElements);
+        em.close();
+        emf.close();
     }
-    public List<String> exactTopAds(Document jsoup){
+    public List<String> exactTopAds(Document jsoup,EntityManager em,String keyword){
         //with error currently
         Elements elements = jsoup.select("table[id~=(.00.)] a[class=ipYENq]");
         /*List<Elements> elementDivs = elements.stream()
@@ -70,7 +80,7 @@ public class Baidu {
                 .map((e) -> e.getElementsByTag("span").text())
                 .collect(Collectors.toList());
     }
-    public List<String> exactRightAds(Document jsoup){
+    public List<String> exactRightAds(Document jsoup,EntityManager em,String keyword){
         //with error currently
         Elements elements = jsoup.select("#ec_im_container font[size=-1][class~=^()");
         /*List<Elements> elementDivs = elements.stream()
@@ -78,10 +88,22 @@ public class Baidu {
                 .collect(Collectors.toList());*/
 
         return elements.stream()
-                .map((e) -> e.text())
+                .map((e) -> {
+                    String url = e.text();
+                    DataEntry de = new DataEntry();
+                    de.setUrl(url);
+                    de.setPosition("Content");
+                    de.setCreateTime(Calendar.getInstance());
+//                    de.setSearchEngine("奇虎");
+//                    de.setKeyword(keyword);
+                    em.getTransaction().begin();
+                    em.persist(de);
+                    em.getTransaction().commit();
+                    return url;
+                })
                 .collect(Collectors.toList());
     }
-    public List<String> exactContentAds(Document jsoup){
+    public List<String> exactContentAds(Document jsoup,EntityManager em,String keyword){
         //with error currently
         Elements elements = jsoup.select("div[id~=(30.)] div:eq(2) span:eq(0)");
         /*List<Elements> elementDivs = elements.stream()
