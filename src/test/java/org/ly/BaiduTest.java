@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class BaiduTest {
 	
-	@Test
+	//@Test
 	public void crawlerTest() throws IOException {
 		Baidu baiduCrawler = new Baidu();
         //String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("bitecoin.html"));

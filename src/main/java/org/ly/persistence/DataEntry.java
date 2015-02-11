@@ -1,9 +1,6 @@
 package org.ly.persistence;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Calendar;
 
 /**
@@ -33,10 +30,14 @@ public class DataEntry {
         this.keyword = keyword;
     }
 
-    String keyword;
-    String url;
-    Calendar createTime;
-    String searchEngine;
+    @Column
+    private String keyword;
+    @Column
+    private String url;
+    @Column
+    private Calendar createTime;
+    @Column
+    private String searchEngine;
 
     public String getUrl() {
         return url;
@@ -60,6 +61,10 @@ public class DataEntry {
 
     public void setSearchEngine(String searchEngine) {
         this.searchEngine = searchEngine;
+    }
+
+    public String toString() {
+        return id.toString();
     }
 
 }
