@@ -89,8 +89,8 @@ public class QiHu {
                     de.setUrl(url);
                     de.setPosition("Top");
                     de.setCreateTime(Calendar.getInstance());
-                    de.setSearchEngine("奇虎");
-//                    de.setKeyword(keyword);
+                    de.setSearchEngine("QiHu");
+                    de.setKeyword(keyword);
                     em.getTransaction().begin();
                     em.persist(de);
                     em.getTransaction().commit();
@@ -114,8 +114,8 @@ public class QiHu {
                         de.setUrl(url);
                         de.setPosition("Right");
                         de.setCreateTime(Calendar.getInstance());
-                    de.setSearchEngine("奇虎");
-//                    de.setKeyword(keyword);
+                        de.setSearchEngine("QiHu");
+                        de.setKeyword(keyword);
                         em.getTransaction().begin();
                         em.persist(de);
                         em.getTransaction().commit();
@@ -139,8 +139,8 @@ public class QiHu {
                     de.setUrl(url);
                     de.setPosition("Content");
                     de.setCreateTime(Calendar.getInstance());
-                    de.setSearchEngine("奇虎");
-//                    de.setKeyword(keyword);
+                    de.setSearchEngine("QiHu");
+                    de.setKeyword(keyword);
                     em.getTransaction().begin();
                     em.persist(de);
                     em.getTransaction().commit();

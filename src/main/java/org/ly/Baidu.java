@@ -77,25 +77,34 @@ public class Baidu {
                 .collect(Collectors.toList());*/
 
         return elements.stream()
-                .map((e) -> e.getElementsByTag("span").text())
+                .map((e) -> {
+                	String url = "";
+                	url = e.getElementsByTag("span").text();
+                	DataEntry de = new DataEntry();
+                    de.setUrl(url);
+                    de.setPosition("Top");
+                    de.setCreateTime(Calendar.getInstance());
+                    de.setSearchEngine("baidu");
+                    de.setKeyword(keyword);
+                    em.getTransaction().begin();
+                    em.persist(de);
+                    em.getTransaction().commit();
+                	return url;
+                })
                 .collect(Collectors.toList());
     }
     public List<String> exactRightAds(Document jsoup,EntityManager em,String keyword){
-        //with error currently
         Elements elements = jsoup.select("#ec_im_container font[size=-1][class~=^()");
-        /*List<Elements> elementDivs = elements.stream()
-                .map((e) -> e.select("#tools_"))
-                .collect(Collectors.toList());*/
-
+       
         return elements.stream()
                 .map((e) -> {
                     String url = e.text();
                     DataEntry de = new DataEntry();
                     de.setUrl(url);
-                    de.setPosition("Content");
+                    de.setPosition("Right");
                     de.setCreateTime(Calendar.getInstance());
-//                    de.setSearchEngine("奇虎");
-//                    de.setKeyword(keyword);
+                    de.setSearchEngine("baidu");
+                    de.setKeyword(keyword);
                     em.getTransaction().begin();
                     em.persist(de);
                     em.getTransaction().commit();
@@ -104,14 +113,22 @@ public class Baidu {
                 .collect(Collectors.toList());
     }
     public List<String> exactContentAds(Document jsoup,EntityManager em,String keyword){
-        //with error currently
-        Elements elements = jsoup.select("div[id~=(30.)] div:eq(2) span:eq(0)");
-        /*List<Elements> elementDivs = elements.stream()
-                .map((e) -> e.select("#tools_"))
-                .collect(Collectors.toList());*/
-
+         Elements elements = jsoup.select("div[id~=(30.)] div:eq(2) span:eq(0)");
+        
         return elements.stream()
-                .map((e) -> e.text())
+                .map((e) -> {
+                	String url = e.text();
+                    DataEntry de = new DataEntry();
+                    de.setUrl(url);
+                    de.setPosition("Content");
+                    de.setCreateTime(Calendar.getInstance());
+                    de.setSearchEngine("baidu");
+                    de.setKeyword(keyword);
+                    em.getTransaction().begin();
+                    em.persist(de);
+                    em.getTransaction().commit();
+                    return url;
+                })
                 .collect(Collectors.toList());
     }
 } 
