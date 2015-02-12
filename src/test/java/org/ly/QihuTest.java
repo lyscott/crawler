@@ -11,13 +11,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
-public class BaiduTest {
+public class QihuTest {
 
     EntityManager em;
     EntityManagerFactory emf;
@@ -38,15 +35,15 @@ public class BaiduTest {
 
     @Test
     public void crawlerTest() throws IOException {
-        Baidu baiduCrawler = new Baidu();
-        String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("bitecoin.html"));
-        //String htmlSourceString = baiduCrawler.getSearchedHtmlSource("上海 花店");
+        Qihu qihuCrawler = new Qihu();
+        String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("比特币_好搜.html"));
+        //String htmlSourceString = qihuCrawler.getSearchedHtmlSource("上海 花店");
         tx.begin();
-        baiduCrawler.crawl(htmlSourceString, "比特币").forEach((de) -> em.persist(de));
+        qihuCrawler.crawl(htmlSourceString, "比特币").forEach((de) -> em.persist(de));
         tx.commit();
         List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
-        Assert.assertTrue(des.size() == 4);
-        baiduCrawler.close();
+//        Assert.assertTrue(des.size() == 4);
+        qihuCrawler.close();
 
     }
 
@@ -55,19 +52,18 @@ public class BaiduTest {
         InputStream is = new BufferedInputStream(new FileInputStream("./data/medical.csv"));
 
         List<String> lines = IOUtils.readLines(is);
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 30; i++) {
             String keyword = lines.get(i);
             System.out.println(keyword);
-            Baidu baiduCrawler = new Baidu();
+            Qihu qihuCrawler = new Qihu();
             //String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("比特币_好搜.html"));
-            String htmlSourceString = baiduCrawler.getSearchedHtmlSource(keyword);
+            String htmlSourceString = qihuCrawler.getSearchedHtmlSource(keyword);
             tx.begin();
-            baiduCrawler.crawl(htmlSourceString, keyword).forEach((de) -> em.persist(de));
+            qihuCrawler.crawl(htmlSourceString, keyword).forEach((de) -> em.persist(de));
             tx.commit();
 //            List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
 //        Assert.assertTrue(des.size() == 4);
-
-            baiduCrawler.close();
+            qihuCrawler.close();
         }
 
     }

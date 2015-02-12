@@ -1,7 +1,8 @@
 package org.ly.persistence;
 
 import javax.persistence.*;
-import java.util.Calendar;
+import java.sql.Timestamp;
+
 
 /**
  * Created by scott on 15-2-11.
@@ -9,62 +10,54 @@ import java.util.Calendar;
 @Entity
 @Table(name = "DataEntry")
 public class DataEntry {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column
+    private final String position;
+
+    @Column
+    private final String keyword;
+
+    @Column
+    private final String url;
+
+    @Column
+    private final String searchEngine;
+
+    @Column
+    private final Timestamp createTime;
+
+    public DataEntry(String position, String keyword, String url, String searchEngine, Timestamp createTime) {
+        this.position = position;
+        this.keyword = keyword;
+        this.url = url;
+        this.searchEngine = searchEngine;
+        this.createTime = createTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public String getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    String position;
-
     public String getKeyword() {
         return keyword;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
-
-    @Column
-    private String keyword;
-    @Column
-    private String url;
-    @Column
-    private Calendar createTime;
-    @Column
-    private String searchEngine;
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Calendar getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Calendar createTime) {
-        this.createTime = createTime;
     }
 
     public String getSearchEngine() {
         return searchEngine;
     }
 
-    public void setSearchEngine(String searchEngine) {
-        this.searchEngine = searchEngine;
+    public Timestamp getCreateTime() {
+        return createTime;
     }
-
-    public String toString() {
-        return id.toString();
-    }
-
 }
