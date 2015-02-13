@@ -40,17 +40,23 @@ public class BaiduTest {
     public void singleCrawlerTest() throws IOException {
         Baidu baiduCrawler = new Baidu();
 //        String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("bitecoin.html"));
+
         String keyword = "蝴蝶养殖";
         String htmlSourceString = null;
         try {
             htmlSourceString = baiduCrawler.getSearchedHtmlSource(keyword,0);
         } catch (Exception e) {
+
             //continue;
         }
+
         tx.begin();
         baiduCrawler.crawl(htmlSourceString, "蝴蝶养殖").forEach((de) -> em.persist(de));
         tx.commit();
+//        List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
+//        Assert.assertTrue(des.size() == 4);
         baiduCrawler.close();
+
     }
 
     @Test

@@ -25,6 +25,11 @@
           <version>18.0</version>
       </dependency>
       <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>3.11</version>
+      </dependency>
+      <dependency>
           <groupId>org.hibernate</groupId>
           <artifactId>hibernate-entitymanager</artifactId>
           <version>4.3.8.Final</version>

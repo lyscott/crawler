@@ -15,19 +15,21 @@ public class DataEntry {
     private Long id;
 
     @Column
-    private final String position;
+    private String position;
 
     @Column
-    private final String keyword;
+    private String keyword;
 
     @Column
-    private final String url;
+    private String url;
 
     @Column
-    private final String searchEngine;
+    private String searchEngine;
 
     @Column
-    private final Timestamp createTime;
+    private Timestamp createTime;
+
+    public DataEntry(){}
 
     public DataEntry(String position, String keyword, String url, String searchEngine, Timestamp createTime) {
         this.position = position;
@@ -59,5 +61,10 @@ public class DataEntry {
 
     public Timestamp getCreateTime() {
         return createTime;
+    }
+
+    @Override
+    public String toString() {
+        return keyword+","+position;
     }
 }

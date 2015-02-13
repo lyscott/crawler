@@ -2,7 +2,6 @@ package org.ly;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ly.persistence.DataEntry;
@@ -13,10 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.io.*;
-import java.lang.reflect.Array;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 public class QihuTest {
@@ -40,7 +40,7 @@ public class QihuTest {
     }
 
     @Test
-    public void singleCrawlerTest() throws IOException {
+    public void crawlerTest() throws IOException {
         Qihu qihuCrawler = new Qihu();
         //String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("比特币_好搜.html"));
         String keyword = "上海注册公司";
@@ -54,18 +54,23 @@ public class QihuTest {
         qihuCrawler.crawl(htmlSourceString, "上海注册公司").forEach((de) -> em.persist(de));
         tx.commit();
         List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
+//        Assert.assertTrue(des.size() == 4);
         qihuCrawler.close();
 
     }
 
     @Test
-    public void crawlerTest() throws IOException {
+    public void readFileTest() throws IOException {
         InputStream is = new BufferedInputStream(new FileInputStream("./data/top1000.csv"));
         List<String> lines = IOUtils.readLines(is);
         Qihu qihuCrawler = new Qihu();
+//        Set<String> s = new LinkedHashSet<String>(lines);
+//        lines = Arrays.asList(s.toArray(new String[]{}));
         for (int i = 639; i < 3000; i++) {
             String keyword = lines.get(i);
             System.out.println(keyword);
+
+            //String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("比特币_好搜.html"));
             String htmlSourceString = null;
             try {
                 htmlSourceString = qihuCrawler.getSearchedHtmlSource(keyword, 0);
@@ -77,6 +82,8 @@ public class QihuTest {
             tx.begin();
             qihuCrawler.crawl(htmlSourceString, keyword).forEach((de) -> em.persist(de));
             tx.commit();
+//            List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
+//        Assert.assertTrue(des.size() == 4);
 
         }
         qihuCrawler.close();
