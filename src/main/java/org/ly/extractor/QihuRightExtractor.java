@@ -17,15 +17,8 @@ public class QihuRightExtractor implements Extractor {
         Elements elements = document.select("div[id=right_show] ul cite");
 
         return elements.stream()
-                .map((e) -> {
-                    String url = "";
-                    if (e.text().indexOf("http://e.360.cn")==-1) {
-                        url = e.text();
-                    } else {
-                        url = "";
-                    }
-                    return url;
-                })
+                .filter(e -> e.text().trim().equals("http://e.360.cn") ? false : true)
+                .map(e -> e.text())
                 .collect(Collectors.toList());
     }
 }

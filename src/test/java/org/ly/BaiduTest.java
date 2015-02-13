@@ -37,35 +37,42 @@ public class BaiduTest {
     }
 
     @Test
-    public void crawlerTest() throws IOException {
+    public void singleCrawlerTest() throws IOException {
         Baidu baiduCrawler = new Baidu();
-        String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("bitecoin.html"));
-        //String htmlSourceString = baiduCrawler.getSearchedHtmlSource("上海 花店");
+//        String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("bitecoin.html"));
+        String keyword = "蝴蝶养殖";
+        String htmlSourceString = null;
+        try {
+            htmlSourceString = baiduCrawler.getSearchedHtmlSource(keyword,0);
+        } catch (Exception e) {
+            //continue;
+        }
         tx.begin();
-        baiduCrawler.crawl(htmlSourceString, "比特币").forEach((de) -> em.persist(de));
+        baiduCrawler.crawl(htmlSourceString, "蝴蝶养殖").forEach((de) -> em.persist(de));
         tx.commit();
-        List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
-        Assert.assertTrue(des.size() == 4);
         baiduCrawler.close();
-
     }
 
     @Test
-    public void readFileTest() throws IOException {
-        InputStream is = new BufferedInputStream(new FileInputStream("./data/medical.csv"));
+    public void crawlerTest() throws IOException {
+        InputStream is = new BufferedInputStream(new FileInputStream("./data/top1000.csv"));
 
         List<String> lines = IOUtils.readLines(is);
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 3000; i++) {
             String keyword = lines.get(i);
             System.out.println(keyword);
             Baidu baiduCrawler = new Baidu();
             //String htmlSourceString = IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("比特币_好搜.html"));
-            String htmlSourceString = baiduCrawler.getSearchedHtmlSource(keyword);
+            String htmlSourceString = null;
+            try {
+                htmlSourceString = baiduCrawler.getSearchedHtmlSource(keyword,0);
+            } catch (Exception e) {
+                continue;
+            }
+
             tx.begin();
             baiduCrawler.crawl(htmlSourceString, keyword).forEach((de) -> em.persist(de));
             tx.commit();
-//            List<DataEntry> des = em.createQuery("select de from DataEntry de", DataEntry.class).getResultList();
-//        Assert.assertTrue(des.size() == 4);
 
             baiduCrawler.close();
         }

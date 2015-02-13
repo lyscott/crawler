@@ -15,10 +15,10 @@ public class QihuContentExtractor implements Extractor {
 
     @Override
     public List<String> extract(Document document, String keyword) {
-        Elements elements = document.select("div[id=sunrise] a");
+        Elements elements = document.select("div[id=sunrise] cite a");
         return elements.stream()
                 .map((e) -> {
-                    String url = e.text();
+                    String url = e.attr("href");
                     return url;
                 })
                 .collect(Collectors.toList());
